@@ -8,6 +8,18 @@
   src: url('./fonts/Actor/Actor-Regular.ttf');
 }
 
+@font-face {
+  font-family: 'icomoon';
+  src: url('./fonts/icomoon/icomoon.eot?g2inc3');
+  src: url('./fonts/icomoon/icomoon.eot?g2inc3#iefix') format('embedded-opentype'),
+    url('./fonts/icomoon/icomoon.ttf?g2inc3') format('truetype'),
+    url('./fonts/icomoon/icomoon.woff?g2inc3') format('woff'),
+    url('./fonts/icomoon/icomoon.svg?g2inc3#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 body {
   margin: 0;
   background-color: #e7e7e7;

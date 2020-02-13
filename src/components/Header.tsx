@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 const headerPropTypes = {
   title: PropTypes.string,
+  rightSection: PropTypes.node,
   fixed: PropTypes.bool
 };
 
@@ -23,6 +24,7 @@ const HeaderWrapper = Styled.div<HeaderPropTypes>(
     box-shadow: 2px 2px 6px 0px rgba(0, 0, 0, 0.3);
     align-items: center;
     ${fixed ? `position: fixed; top: 0;` : ``}
+    z-index: 1000;
   `
 );
 
@@ -31,17 +33,26 @@ const HeaderText = Styled.div`
   font-family: 'Actor';
   font-size: 16px;
   font-weight: bold;
+  color: #000;
   text-transform: uppercase;
   margin-left: 10px;
+`;
+
+const RightSection = Styled.div`
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  margin-right: 10px;
 `;
 
 const Header: React.FC<HeaderPropTypes> = (
   props: HeaderPropTypes
 ): ReactElement<HeaderPropTypes> => {
-  const { title, fixed } = props;
+  const { title, rightSection, fixed } = props;
   return (
     <HeaderWrapper fixed={fixed}>
       <HeaderText>{title}</HeaderText>
+      <RightSection>{rightSection}</RightSection>
     </HeaderWrapper>
   );
 };
