@@ -10,7 +10,8 @@ const dropDownPropTypes = {
       label: PropTypes.string
     })
   ),
-  size: PropTypes.oneOf(['small', 'medium', 'large'])
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  onChange: PropTypes.any,
 };
 
 const dropDownDefaultProps = {
@@ -44,9 +45,9 @@ const DropdownComponent = Styled.select<DropDownPropTypes>(
 const Dropdown: React.FC<DropDownPropTypes> = (
   props: DropDownPropTypes
 ): ReactElement<DropDownPropTypes> => {
-  const { label, options } = props;
+  const { label, options, onChange } = props;
   return (
-    <DropdownComponent>
+    <DropdownComponent onChange={onChange}>
       <option value="default">{label}</option>
       {options!.map((option, index) => (
         <option key={`dropdownOpt-${index}`} value={option!.value}>

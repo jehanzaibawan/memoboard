@@ -27,19 +27,31 @@ const postIdea = (): boolean => {
   return true;
 };
 
-const updateIdea = (): boolean => {
+const updateIdea = (id: number, field: string, newValue: string): boolean => {
+  const existingData: Array<Idea> = getData();
+
+  const updateIndex = existingData.findIndex((data: Idea) => {
+    return data.id === id;
+  });
+
+  if (field === 'text') existingData[updateIndex].title = newValue;
+  if (field === 'textarea') existingData[updateIndex].body = newValue;
+
+  storeData(existingData);
+
   return true;
 };
 
 const deleteIdea = (id: number): boolean => {
   const existingData: Array<Idea> = getData();
-  const x = existingData.findIndex((data: Idea) => {
+
+  const deleteIndex = existingData.findIndex((data: Idea) => {
     return data.id === id;
   });
-  console.log(x);
-  existingData.splice(x, 1);
-  storeData(existingData);
 
+  existingData.splice(deleteIndex, 1);
+
+  storeData(existingData);
   return true;
 };
 

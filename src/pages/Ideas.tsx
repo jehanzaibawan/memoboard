@@ -6,8 +6,9 @@ import Dropdown from '../components/Dropdown';
 import Button from '../components/Button';
 import EditableCard from '../components/EditableCard';
 import ClickableIcon from '../components/ClickableIcon';
-import { getIdeas, postIdea, deleteIdea } from '../APIs/fakeAPI';
+import { getIdeas, postIdea, updateIdea, deleteIdea } from '../APIs/fakeAPI';
 import { Idea } from '../shared/interfaces';
+import _ from 'lodash';
 
 const Wrapper = Styled.div`
   display: flex;
@@ -41,11 +42,13 @@ const SubWrapper = Styled.div`
 
 const Ideas = (): ReactElement => {
   const [ideas, setIdeas] = useState<Array<Idea>>([]);
+  const [newRectFlag, setNewRectFlag] = useState<boolean>(false);
+  const [sortBy, setSortBy] = useState('default');
 
   useEffect(() => {
     const ideas: Array<Idea> = getIdeas();
     setIdeas(ideas);
-  }, []);
+  }, [newRectFlag]);
 
   const sortingOptions = [
     {
@@ -64,13 +67,25 @@ const Ideas = (): ReactElement => {
         title="Ideas"
         rightSection={
           <>
-            <Dropdown label="Sort by" size="small" options={sortingOptions} />
+            <Dropdown
+              label="Sort by"
+              size="small"
+              options={sortingOptions}
+              onChange={(e: any) => {
+                setNewRectFlag(false);
+                const value = e.target.value;
+                if (value === 'title') setSortBy('title');
+                else if (value === 'created_date') setSortBy('created_date');
+                else setSortBy('default');
+              }}
+            />
             <Divider width="2px" />
             <Button
               size="small"
               isPrimary
               onClick={(): void => {
                 postIdea();
+                setNewRectFlag(true);
                 setIdeas(getIdeas());
               }}
             >
@@ -82,25 +97,70 @@ const Ideas = (): ReactElement => {
       />
       <Divider height="35px" />
       <CardContainer>
-        {ideas.map((value: Idea, index) => (
-          <SubWrapper key={`editableCard-${index}`}>
-            <ClickableIcon
-              content="\e9ad"
-              onClick={(): void => {
-                deleteIdea(value.id);
-                setIdeas(getIdeas());
-              }}
-            />
-            <EditableCard
-              width="150px"
-              height="150px"
-              dropShadow
-              title={value.id}
-              content={value.body}
-              footer={value.createdDate}
-            />
-          </SubWrapper>
-        ))}
+        {(() => {
+          if (newRectFlag) {
+            const latestRec: Idea = ideas[ideas.length - 1];
+            const composed = (
+              <SubWrapper>
+                <ClickableIcon
+                  content="\e9ad"
+                  onClick={(): void => {
+                    deleteIdea(latestRec.id);
+                    setNewRectFlag(false);
+                  }}
+                />
+                <EditableCard
+                  width="150px"
+                  height="150px"
+                  dropShadow
+                  title={latestRec.title}
+                  content={latestRec.body}
+                  footer={latestRec.createdDate}
+                  onBlur={(e: any) => {
+                    updateIdea(latestRec.id, e.target.type, e.target.value);
+                    // setIdeas(getIdeas()); // not necessary to call it here
+                  }}
+                  setFocus
+                />
+              </SubWrapper>
+            );
+
+            ideas.splice(ideas.length - 1, 1);
+
+            return composed;
+          }
+        })()}
+
+        {(() => {
+          const sortedIdeas = _.sortBy(ideas, o => {
+            if (sortBy === 'title') return o.title;
+            else if (sortBy === 'created_date') return o.createdDate;
+            return o.id;
+          });
+          return sortedIdeas.map((value: Idea, index) => (
+            <SubWrapper key={`editableCard-${index}`}>
+              <ClickableIcon
+                content="\e9ad"
+                onClick={(): void => {
+                  deleteIdea(value.id);
+                  setIdeas(getIdeas());
+                }}
+              />
+              <EditableCard
+                width="150px"
+                height="150px"
+                dropShadow
+                title={value.title}
+                content={value.body}
+                footer={value.createdDate}
+                onBlur={(e: any) => {
+                  updateIdea(value.id, e.target.type, e.target.value);
+                  // setIdeas(getIdeas()); // not necessary to call it here
+                }}
+              />
+            </SubWrapper>
+          ));
+        })()}
       </CardContainer>
     </Wrapper>
   );
