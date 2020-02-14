@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import Styled from 'styled-components';
+import _ from 'lodash';
 import Header from '../components/Header';
 import Divider from '../components/Divider';
 import Dropdown from '../components/Dropdown';
@@ -8,7 +9,6 @@ import EditableCard from '../components/EditableCard';
 import ClickableIcon from '../components/ClickableIcon';
 import { getIdeas, postIdea, updateIdea, deleteIdea } from '../APIs/fakeAPI';
 import { Idea } from '../shared/interfaces';
-import _ from 'lodash';
 
 const Wrapper = Styled.div`
   display: flex;
@@ -71,7 +71,7 @@ const Ideas = (): ReactElement => {
               label="Sort by"
               size="small"
               options={sortingOptions}
-              onChange={(e: any) => {
+              onChange={(e: any): void => {
                 setNewRectFlag(false);
                 const value = e.target.value;
                 if (value === 'title') setSortBy('title');
@@ -97,7 +97,7 @@ const Ideas = (): ReactElement => {
       />
       <Divider height="35px" />
       <CardContainer>
-        {(() => {
+        {((): any => {
           if (newRectFlag) {
             const latestRec: Idea = ideas[ideas.length - 1];
             const composed = (
@@ -116,7 +116,7 @@ const Ideas = (): ReactElement => {
                   title={latestRec.title}
                   content={latestRec.body}
                   footer={latestRec.createdDate}
-                  onBlur={(e: any) => {
+                  onBlur={(e: any): void => {
                     updateIdea(latestRec.id, e.target.type, e.target.value);
                     // setIdeas(getIdeas()); // not necessary to call it here
                   }}
@@ -131,7 +131,7 @@ const Ideas = (): ReactElement => {
           }
         })()}
 
-        {(() => {
+        {((): any => {
           const sortedIdeas = _.sortBy(ideas, o => {
             if (sortBy === 'title') return o.title;
             else if (sortBy === 'created_date') return o.createdDate;
@@ -153,7 +153,7 @@ const Ideas = (): ReactElement => {
                 title={value.title}
                 content={value.body}
                 footer={value.createdDate}
-                onBlur={(e: any) => {
+                onBlur={(e: any): void => {
                   updateIdea(value.id, e.target.type, e.target.value);
                   // setIdeas(getIdeas()); // not necessary to call it here
                 }}

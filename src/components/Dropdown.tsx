@@ -11,7 +11,7 @@ const dropDownPropTypes = {
     })
   ),
   size: PropTypes.oneOf(['small', 'medium', 'large']),
-  onChange: PropTypes.any,
+  onChange: PropTypes.any
 };
 
 const dropDownDefaultProps = {
