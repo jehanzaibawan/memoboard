@@ -12,6 +12,7 @@
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.0",
     "@types/styled-components": "^4.4.3",
+    "light-toast": "^0.2.3",
     "lodash": "^4.17.15",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

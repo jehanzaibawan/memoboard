@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import Styled from 'styled-components';
+import Toast from 'light-toast';
 import _ from 'lodash';
 import Header from '../components/Header';
 import Divider from '../components/Divider';
@@ -7,7 +8,6 @@ import Dropdown from '../components/Dropdown';
 import Button from '../components/Button';
 import EditableCard from '../components/EditableCard';
 import ClickableIcon from '../components/ClickableIcon';
-import Notification from '../components/Notification';
 import { getIdeas, postIdea, updateIdea, deleteIdea } from '../APIs/fakeAPI';
 import { Idea } from '../shared/interfaces';
 
@@ -41,11 +41,16 @@ const SubWrapper = Styled.div`
   }
 `;
 
+const Message = Styled.span`
+  font-family: 'Actor';
+  font-size: 12px;
+  color: #fff;
+`;
+
 const Ideas = (): ReactElement => {
   const [ideas, setIdeas] = useState<Array<Idea>>([]);
   const [newRectFlag, setNewRectFlag] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState('default');
-  const [notify, setNotify] = useState({ visible: false, message: '' });
 
   useEffect(() => {
     const ideas: Array<Idea> = getIdeas();
@@ -62,12 +67,6 @@ const Ideas = (): ReactElement => {
       label: 'Created date'
     }
   ];
-
-  const setNofitication = (message: string): void => {
-    setNotify({ visible: true, message });
-
-    setTimeout(() => setNotify({ visible: false, message }), 3000);
-  };
 
   return (
     <Wrapper>
@@ -125,9 +124,9 @@ const Ideas = (): ReactElement => {
                   content={latestRec.body}
                   footer={latestRec.createdDate}
                   onBlur={(e: any): void => {
+                    setNewRectFlag(false);
                     updateIdea(latestRec.id, e.target.type, e.target.value);
-                    setNofitication('Idea updated successfully!');
-                    // setIdeas(getIdeas()); // not necessary to call it here
+                    Toast.success('Idea saved!', 1000);
                   }}
                   setFocus
                 />
@@ -152,6 +151,7 @@ const Ideas = (): ReactElement => {
                 content="\e9ad"
                 onClick={(): void => {
                   deleteIdea(value.id);
+                  setNewRectFlag(false);
                   setIdeas(getIdeas());
                 }}
               />
@@ -164,15 +164,13 @@ const Ideas = (): ReactElement => {
                 footer={value.createdDate}
                 onBlur={(e: any): void => {
                   updateIdea(value.id, e.target.type, e.target.value);
-                  setNofitication('Idea updated successfully!');
-                  // setIdeas(getIdeas()); // not necessary to call it here
+                  Toast.success('Idea updated!', 1000);
                 }}
               />
             </SubWrapper>
           ));
         })()}
       </CardContainer>
-      {notify.visible && <Notification>{notify.message}</Notification>}
     </Wrapper>
   );
 };
