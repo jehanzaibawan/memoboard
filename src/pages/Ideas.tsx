@@ -7,6 +7,7 @@ import Dropdown from '../components/Dropdown';
 import Button from '../components/Button';
 import EditableCard from '../components/EditableCard';
 import ClickableIcon from '../components/ClickableIcon';
+import Notification from '../components/Notification';
 import { getIdeas, postIdea, updateIdea, deleteIdea } from '../APIs/fakeAPI';
 import { Idea } from '../shared/interfaces';
 
@@ -44,6 +45,7 @@ const Ideas = (): ReactElement => {
   const [ideas, setIdeas] = useState<Array<Idea>>([]);
   const [newRectFlag, setNewRectFlag] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState('default');
+  const [notify, setNotify] = useState({ visible: false, message: '' });
 
   useEffect(() => {
     const ideas: Array<Idea> = getIdeas();
@@ -60,6 +62,12 @@ const Ideas = (): ReactElement => {
       label: 'Created date'
     }
   ];
+
+  const setNofitication = (message: string): void => {
+    setNotify({ visible: true, message });
+
+    setTimeout(() => setNotify({ visible: false, message }), 3000);
+  };
 
   return (
     <Wrapper>
@@ -118,6 +126,7 @@ const Ideas = (): ReactElement => {
                   footer={latestRec.createdDate}
                   onBlur={(e: any): void => {
                     updateIdea(latestRec.id, e.target.type, e.target.value);
+                    setNofitication('Idea updated successfully!');
                     // setIdeas(getIdeas()); // not necessary to call it here
                   }}
                   setFocus
@@ -155,6 +164,7 @@ const Ideas = (): ReactElement => {
                 footer={value.createdDate}
                 onBlur={(e: any): void => {
                   updateIdea(value.id, e.target.type, e.target.value);
+                  setNofitication('Idea updated successfully!');
                   // setIdeas(getIdeas()); // not necessary to call it here
                 }}
               />
@@ -162,6 +172,7 @@ const Ideas = (): ReactElement => {
           ));
         })()}
       </CardContainer>
+      {notify.visible && <Notification>{notify.message}</Notification>}
     </Wrapper>
   );
 };
