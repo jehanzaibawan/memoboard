@@ -3,7 +3,9 @@ This app lets you store your idea, modify and delete them in the future and also
 
 ### Installing and running the app
 
-Clone the app and install the dependecies using `yarn`, once the depedencies are installed run `yarn start` to start the proejct, it will automatically open up the browsers.
+Clone the app and install the dependecies using `yarn`, once the depedencies are installed run `yarn start` to start the proejct, it will automatically open up the browser, make sure port 3000 is free on your machine. You can view the project on http://localhost:3000/
+<br><br>
+The project is also deployed on the heroku, visit https://memoboard.herokuapp.com/
 
 ### Major features of the App
 - Add new ideas
