@@ -124,7 +124,6 @@ const Ideas = (): ReactElement => {
                   content={latestRec.body}
                   footer={latestRec.createdDate}
                   onBlur={(e: any): void => {
-                    setNewRectFlag(false);
                     updateIdea(latestRec.id, e.target.type, e.target.value);
                     Toast.success('Idea saved!', 1000);
                   }}
